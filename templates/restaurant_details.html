@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!--This is where the "view information button
+	takes the user. Displays the average rating, 
+	associates hashtags and also text reviews.--> 
+<html>
+
+<h1>{{ restaurant.name }}</h1>
+<p>Average Rating: {{ restaurant.average_rating }}</p>
+
+<h2>Hashtags</h2>
+<ul>
+    {% for hashtag in hashtags %}
+        <li>{{ hashtag.hashtag_text }}</li>
+    {% endfor %}
+</ul>
+
+<h2>Reviews</h2>
+<ul>
+    {% for review in reviews %}
+        <li>
+            Text: {{ review.review_text }}
+        </li>
+    {% endfor %}
+</ul>
+</html>
+

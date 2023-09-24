@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!--This is where the search option takes the user.
+	This currently only works for restaurant names, 
+	so the user can't search via hastags yet. --> 
+<html>
+
+
+<h1>Search Results for "{{ search_text }}"</h1>
+
+<ul>
+    {% for restaurant in search_result %}
+        <li>
+            {{ restaurant.name }} (Average Rating: {{ restaurant.average_rating }})
+            <a href="/restaurant/{{ restaurant.id }}">More Information</a>
+        </li>
+    {% endfor %}
+</ul>
+
