@@ -22,9 +22,13 @@ Disclaimer: Sorry I switched to English, I realised my Finish is not good enough
 - Splitting the app.py into more managable chunks. 
 
 # How to try it out: 
-1. Open three (separate) terminal windows. Execute the following in the precise order given below.
+1. Make a folder where you'd like to try the app. In that folder create a .env file and define its content as the following: 
+```DATABASE_URL=<the adress of the local database>```
+```SECRET_KEY=<secret-key>```
 
-2. In the first terminal window you go to a folder where you'd like to run the program. Install the python virtual-environment there by inputting the following in the command line: 
+2. Open three (separate) terminal windows. Execute the following in the precise order given below.
+
+3. In the first terminal window you go to a folder where you'd like to run the program. Install the python virtual-environment there by inputting the following in the command line: 
 ```python3 -m venv venv```.
 Then input 
 ```source venv/bin/activate```.
@@ -36,17 +40,17 @@ No need to close this window, we use it later in (4).
 ```start-pg.sh```.
 Do not do anything else in this terminal window. This is simply for running the database. Do not close this window. 
 
-6. In the second terminal you write $psql, this open the PostgreSQL interpreter. Then you create the tables by writing 
+5. In the second terminal you write $psql, this open the PostgreSQL interpreter. Then you create the tables by writing 
 ```psql < schema.sql```.
 The schema.sql contains all the tables you will need. This window can be closed after creating the tables if you want.
 
-8. Return to the first terminal window, write 
+6. Return to the first terminal window, write 
 ```flask run```.
 This should now give you a URL page to visit. Click on that and voilá. Explore.
 
-10. When you feel like you have explored enough, do terminate the database (second terminal window) by ctrl-c, otherwise your computer might become a bit slow after a day or two.
+7. When you feel like you have explored enough, do terminate the database (second terminal window) by ctrl-c, otherwise your computer might become a bit slow after a day or two.
 
-11. You may also close the flask environment in terminal window 1. by ctrl-c. 
+8. You may also close the flask environment in terminal window 1. by ctrl-c. 
 
 
 ---------------
