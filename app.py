@@ -49,6 +49,8 @@ def login():
         #In case of wrong input.
         error_message = "Invalid username or password. Please try again."
         return render_template("login.html", error_message=error_message)
+    #fetching the actual login page...     
+    return render_template("login.html", error_message=error_message)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -236,9 +238,20 @@ def search():
             text("SELECT * FROM restaurants WHERE name ILIKE :search_text"),
             {"search_text": f"%{search_text}%"}  # Use ILIKE for case-insensitive search
         ).fetchall()
+        
+        #Perform a database quert to search for restaurants also related to a certain hashtag... 
+        hashtag_result = db.session.execute(
+            text("""SELECT R.* FROM restaurants R
+            	INNER JOIN restaurant_hashtags H ON H.restaurant_id = R.id 
+            	INNER JOIN hashtags Y ON Y.id = H.hashtag_id
+            	WHERE Y.hashtag_text ILIKE :search_text"""),
+            	{"search_text": f"%{search_text}%"}
+            	).fetchall()
+        #add the option of searching via hashtags, somehow displaying the combination of both... 
+        
 
         return render_template("search_results.html", \
-        search_text=search_text, search_result=search_result)
+        search_text=search_text, search_result=search_result, hashtag_result = hashtag_result)
 
     #Handle cases where no search criteria is provided
     flash("Please enter a search criteria.", "error")
