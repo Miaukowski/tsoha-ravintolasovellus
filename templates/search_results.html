@@ -14,5 +14,11 @@
             <a href="/restaurant/{{ restaurant.id }}">More Information</a>
         </li>
     {% endfor %}
+    {% for restaurant in hashtag_result %}
+        <li>
+            {{ restaurant.name }} (Average Rating: {{ restaurant.average_rating }})
+            <a href="/restaurant/{{ restaurant.id }}">More Information</a>
+        </li>
+    {% endfor %}
 </ul>
 
