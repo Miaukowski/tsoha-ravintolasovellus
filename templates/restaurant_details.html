@@ -5,7 +5,7 @@
 <html>
 
 <h1>{{ restaurant.name }}</h1>
-<p>Average Rating: {{ restaurant.average_rating }}</p>
+<p>Average Rating: {{ restaurant.average_rating|round(2)}}</p>
 
 <h2>Hashtags</h2>
 <ul>
@@ -22,5 +22,10 @@
         </li>
     {% endfor %}
 </ul>
+
+<form action="/dashboard">
+    <button type="submit">Go to Front Page</button>
+</form>
+
 </html>
 

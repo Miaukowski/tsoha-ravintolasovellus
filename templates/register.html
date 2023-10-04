@@ -15,6 +15,7 @@
     {% endif %}
 
     <form method="POST" action="/register">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
         

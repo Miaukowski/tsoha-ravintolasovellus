@@ -16,7 +16,7 @@
 	<ul>
 		{% for restaurant in restaurants %}
 		    <li>
-		        {{ restaurant.name }} (Average Rating: {{ restaurant.average_rating }})
+		        {{ restaurant.name }} (Average Rating: {{ restaurant.average_rating|round(2)}})
 		        <a href="/restaurant/{{ restaurant.id }}">More Information</a>
 		    </li>
 		{% endfor %}
@@ -30,6 +30,7 @@
     
     <h2>Review a New Restaurant</h2>
     <form method="POST" action="/review">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <label for="restaurant_name">Restaurant Name:</label>
         <input type="text" name="restaurant_name" required><br>
         

@@ -10,15 +10,18 @@
 <ul>
     {% for restaurant in search_result %}
         <li>
-            {{ restaurant.name }} (Average Rating: {{ restaurant.average_rating }})
+            {{ restaurant.name }} (Average Rating: {{ restaurant.average_rating|round(2) }})
             <a href="/restaurant/{{ restaurant.id }}">More Information</a>
         </li>
     {% endfor %}
     {% for restaurant in hashtag_result %}
         <li>
-            {{ restaurant.name }} (Average Rating: {{ restaurant.average_rating }})
+            {{ restaurant.name }} (Average Rating: {{ restaurant.average_rating|round(2)}})
             <a href="/restaurant/{{ restaurant.id }}">More Information</a>
         </li>
     {% endfor %}
+    <form action="/dashboard">
+    <button type="submit">Go to Front Page</button>
+	</form>
 </ul>
 
