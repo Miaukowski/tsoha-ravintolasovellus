@@ -2,6 +2,7 @@
 This shall be split into managable chunks later. So separate files.
 """
 from os import getenv
+import secrets
 from flask import Flask
 from flask import redirect, render_template, request, session, flash
 from flask_sqlalchemy import SQLAlchemy
@@ -21,7 +22,12 @@ def front():
     """
     The front page for non loggged users.
     """
-    restaurants = db.session.execute(text("SELECT * FROM restaurants")).fetchall()
+    restaurants = db.session.execute(
+        text("SELECT r.id, r.name, AVG(re.rating) as average_rating "
+             "FROM restaurants r "
+             "LEFT JOIN reviews re ON r.id = re.restaurant_id "
+             "GROUP BY r.id, r.name")
+    ).fetchall()
     return render_template("front_page.html", restaurants=restaurants)
 
 @app.route("/login", methods=["GET", "POST"])
@@ -42,6 +48,8 @@ def login():
         ).fetchone()
 
         if user and check_password_hash(user.password, password):
+            csrf_token = secrets.token_hex(16)
+            session["csrf_token"] = csrf_token
             # Login successful -> store the username in the session
             session["username"] = username
             return redirect("/dashboard")
@@ -49,6 +57,7 @@ def login():
         #In case of wrong input.
         error_message = "Invalid username or password. Please try again."
         return render_template("login.html", error_message=error_message)
+        
     #fetching the actual login page...     
     return render_template("login.html", error_message=error_message)
 
@@ -86,6 +95,10 @@ def register():
 	#In case of unnsuccessfull register
     return render_template("register.html", error_message=error_message)
 
+def is_authenticated():
+    return 'username' in session  # Check if the 'username' key exists in the session
+
+
 
 @app.route("/logout")
 def logout():
@@ -101,7 +114,15 @@ def dashboard():
     """
     The "front-page" for logged in users.
     """
-    restaurants = db.session.execute(text("SELECT * FROM restaurants")).fetchall()
+    if not is_authenticated():
+        # Redirect unauthenticated users to the login page
+        return redirect(url_for('login'))
+    restaurants = db.session.execute(
+        text("SELECT r.id, r.name, AVG(re.rating) as average_rating "
+             "FROM restaurants r "
+             "LEFT JOIN reviews re ON r.id = re.restaurant_id "
+             "GROUP BY r.id, r.name")
+    ).fetchall()
     return render_template("dashboard.html", restaurants=restaurants)
 
 
@@ -110,6 +131,9 @@ def review():
     """
     The add and review a new restaurant page.
     """
+    if not is_authenticated():
+        # Redirect unauthenticated users to the login page
+        return redirect(url_for('login'))
     if request.method == "POST":
         restaurant_name = request.form["restaurant_name"]
         rating = int(request.form["rating"])
@@ -191,9 +215,16 @@ def restaurant(restaurant_id):
     """
     The page if the user clicks "More information" on the restaurant.
     """
+    if not is_authenticated():
+        # Redirect unauthenticated users to the login page
+        return redirect(url_for('login'))
     restaurant = db.session.execute(
-        text("SELECT * FROM restaurants WHERE id = :restaurant_id"),
-        {"restaurant_id": restaurant_id}
+        text("SELECT r.id, r.name, AVG(re.rating) as average_rating "
+             "FROM restaurants r "
+             "LEFT JOIN reviews re ON r.id = re.restaurant_id "
+             "WHERE r.id = :restaurant_id "
+             "GROUP BY r.id, r.name"),
+             {"restaurant_id": restaurant_id}
     ).fetchone()
 
     if restaurant:
@@ -229,24 +260,37 @@ def search():
     this only searches for restaurant names similar to
     the search word.
     """
+    if not is_authenticated():
+        # Redirect unauthenticated users to the login page
+        return redirect(url_for('login'))
     # Get the search text from the query parameters
     search_text = request.args.get("search_text")
 
     if search_text:
         # Perform a database query to search for restaurants based on the search criteria
         search_result = db.session.execute(
-            text("SELECT * FROM restaurants WHERE name ILIKE :search_text"),
+            text("""
+                SELECT R.*, AVG(re.rating) as average_rating 
+                FROM restaurants R 
+                LEFT JOIN reviews re ON R.id = re.restaurant_id
+                WHERE R.name ILIKE :search_text
+                GROUP BY R.id
+            """),    
             {"search_text": f"%{search_text}%"}  # Use ILIKE for case-insensitive search
         ).fetchall()
         
         #Perform a database quert to search for restaurants also related to a certain hashtag... 
         hashtag_result = db.session.execute(
-            text("""SELECT R.* FROM restaurants R
+            text("""SELECT R.*, AVG(re.rating) as average_rating
+                FROM restaurants R
             	INNER JOIN restaurant_hashtags H ON H.restaurant_id = R.id 
             	INNER JOIN hashtags Y ON Y.id = H.hashtag_id
-            	WHERE Y.hashtag_text ILIKE :search_text"""),
-            	{"search_text": f"%{search_text}%"}
-            	).fetchall()
+            	LEFT JOIN reviews re ON R.id = re.restaurant_id
+            	WHERE Y.hashtag_text ILIKE :search_text
+            	GROUP BY R.id
+             """),
+            {"search_text": f"%{search_text}%"}
+        ).fetchall()
         #add the option of searching via hashtags, somehow displaying the combination of both... 
         
 
