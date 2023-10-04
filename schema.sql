@@ -37,4 +37,11 @@ CREATE TABLE restaurant_hashtags (
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id),
     FOREIGN KEY (hashtag_id) REFERENCES hashtags(id)
 );
+-- Associates reviews with hastags
+CREATE TABLE review_hashtags (
+	id SERIAL PRIMARY KEY, 
+	review_id INT NOT NULL,
+	hashtag_id INT NOT NULL,
+	FOREIGN KEY (review_id) REFERENCES reviews(id)
+	FOREIGN KEY (hashtag_id) REFERENCES hashtags(id) 
 
