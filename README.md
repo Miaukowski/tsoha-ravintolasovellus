@@ -1,24 +1,21 @@
-Disclaimer: Sorry I switched to English, I realised my Finish is not good enough for all this explaining I am about to do. 
+A little app for reviewing restaurants, searching for them based on name or associated hashtag, user profile management and such. 
+Requires registering/logging in for full "enjoyment". 
 
 # Features that are currently implemented and working:
-- A front page with login and register option, and the page also displays restaurants that have been reviewed as a little "teaser". 
-- A login page.
-- A register page. 
-- A dashboard, that displays the restaurants that have been reviewed, as well as their average score. This also comes with an option of clicking a "view information" button.
-- A separate "restaurant details" page, this is where the user gets redirected when they click the "view information" button,  where the text part of the review and hashtags are displayed.
-- The dashboard also features an option to add a new restaurant, or review an existing one, giving it a grade from 0-5, writing a little text about the restaurant and also adding hashtags. 
-- The dashboard features a search option, where the user currently can search for restaurants (currently only!) by name.
-- The search button takes you to a separate page, that shows the user the search results. This then gives the users information about said restaurant (average score & name ). 
+- A front page with login and register option, and the page also displays The top 5 restaurants as a little "teaser". 
+- A login page & a register page. 
+- A dashboard, that displays the top 5 restaurants that have been reviewed, as well as their average score. This also comes with an option of clicking a "view information" button.
+- A separate "restaurant details" page, this is where the user gets redirected when they click the "view information" button,here the average score, text part of the reviews and hashtags are displayed.
+- The dashboard also features an option to review a restaurant(does not matter if it existts or not, the system checks that), giving it a grade from 0-5, writing a little text about the restaurant and also adding hashtags. 
+- The dashboard features a search option, where the user search for restaurants by name or hastags (basically the system automatically searches both options).
+- The search button takes you to a separate page, that shows the user the search results. This then gives the users information about said restaurant (average score & name ).
+- Log out buttons are now everywhere.
+- security measures are in place.
+- A user profile page, where the user can also remove their profile.
+- A better look. 
 
 # Features that need to be implemented:
-- A log out button. 
-- Security measures needs to be reviewed. 
-- The option to search for restaurants based on hashtags. 
-- Administrator rights and options. 
-- An option for the user to remove their account. 
-- More options for information about the restaurant, such as opening hours etc. 
-- Unsure if I only want users with admin rights to classify restaurants, I like that the user has the freedom to do so. Maybe only save admin rights for "censorship". 
-- A better looking layout, it's horribly ugly at the moment. 
+- Administrator rights and options (censorship)
 - Splitting the app.py into more managable chunks. 
 
 # How to try it out: 
@@ -51,18 +48,3 @@ This should now give you a URL page to visit. Click on that and voilá. Explore.
 7. When you feel like you have explored enough, do terminate the database (second terminal window) by ctrl-c, otherwise your computer might become a bit slow after a day or two.
 
 8. You may also close the flask environment in terminal window 1. by ctrl-c. 
-
-
----------------
-# Previous description
-## Ravintolasovellus
-### Keskeiset Toiminnot
-- Käyttäjä ja ylläpitäjä mahdollisuudet.
-- Käyttäjä pystyy hakemaan ravintoloita (myös jonkun tietyn haku sanan perusteella - ns. "filtteröidä" hakutulokset). 
-- Käyttäjä voi kirjautua sisään ja ulos, ja myös luoda uuden tunnuksen tai poistaa vanhan (tietoturvaa myös huomioiden).
-- käyttäjä voi hakea tietoa ravintolasta (aukiooloajat, arvostelut yms). 
-- käyttäjä voi arvostella ravintolaa.
-- ylläpitäjä voi poistaa arvostelut (jos on epäsopivia kommentteja yms). 
-- ylläpitäjä voi luokitella ravintolaa (esim: sushi, kebab, salaatti yms), ja käyttäjä voi sitten valita tätä "haku vaihtoehtoa". 
-- ylläpitäjällä saa myös dataa suosituista ravintoloista, ja voi vaikka kertoa tästä käyttäjille, esim "suositut nyt".
-
