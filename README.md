@@ -19,7 +19,7 @@ Requires registering/logging in for full "enjoyment".
 - Splitting the app.py into more managable chunks. 
 
 # How to try it out: 
-1. Make a folder where you'd like to try the app. In that folder create a .env file and define its content as the following: 
+1. Make a folder where you'd like to try the app. Clone this repository and all its content to that folder. In that folder create a .env file and define its content as the following: 
 ```DATABASE_URL=<the adress of the local database>```
 ```SECRET_KEY=<secret-key>```
 
