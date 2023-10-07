@@ -1,0 +1,114 @@
+        body {
+            margin: auto;
+            max-width: 35em;
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            background: #FDF5E6;
+        }
+
+        .header-big {
+            background: LightSalmon;
+            font-weight: bold;
+            padding: 0.3em 0.3em;
+            font-size: 1.5em;
+            border-radius: 0.5em;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+            display: flex;
+            color: FloralWhite;
+    		align-items: center;
+    		justify-content: center;
+        }
+        
+        .header-small {
+            background: LightSalmon;
+            font-weight: bold;
+            padding: 0.2em 0.3em;
+            font-size: 1.2em;
+            border-radius: .5em;
+            margin-top: 0.2em;
+            margin-bottom: 0.1em;
+            display: flex;
+            color: FloralWhite;
+    		align-items: center;
+    		justify-content: center;
+    		
+        }
+        .register {
+            background: DarkSeaGreen;
+            font-weight: bold;
+            padding: 0.05em 0.05em;
+            font-size: 1.2em;
+            border-radius: .5em;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+            display: flex;
+            color: FloralWhite;
+    		align-items: center;
+    		justify-content: center;
+    		
+        }
+        .subheader {
+        	background: FloralWhite;
+        	font-weight: lighter;
+        	padding: 0.2em 0.2em;
+			font-size: 0.8em; 
+			color: #333;
+			margin-bottom: 0.5em;
+			border-radius: 0.5em;
+			display: flex;
+			justify-content: center;
+    		align-items: center;
+    	}
+
+		form {
+			margin: 0 auto;
+			float: right;
+			position: relative;
+			padding: .5em;
+			background: blanchedalmond;
+			border-radius: .5em;
+			max-width: 20em;
+			display  : inline-block;
+			grid-template-columns: 10em 10em;
+			grid-row-gap: .9em;
+		}
+
+		.container {
+			padding: .5em;
+			background: blanchedalmond;
+			border-radius: .5em;
+			max-width: 20em;
+			display: flex;
+			grid-template-columns: 10em 10em;
+			grid-row-gap: .9em;
+			text-align: center;
+			margin-top: 0.5em;
+			margin: 0 auto;
+		}
+		.display {
+			padding: 0.5em 0.3em;
+			background: blanchedalmond;
+			border-radius: 0.5em;
+			max-width: 20em;
+			display: flex;
+			grid-template-columns: 10em 10em;
+			grid-row-gap: .9em;
+			text-align: center;
+			margin-top: 0.2em;
+			margin-bottom: 0.3em;
+		}
+		
+		.contento {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			flex-wrap: wrap;
+			padding: 10px;
+		}
+
+		.left-column,
+		.right-column {
+			width: calc(50% - 10px);
+			box-sizing: border-box;
+		}
+
