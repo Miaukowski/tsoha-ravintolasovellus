@@ -117,14 +117,21 @@ def is_authenticated():
     return 'username' in session
 
 
+@app.route("/successful_logout")
+def successful_logout():
+    """
+    Rendering the confirmation message. 
+    """
+    return render_template("successful_logout.html")
+
 
 @app.route("/logout")
 def logout():
     """
-    User logout.
+    User logout powerhorse.
     """
     del session["username"]
-    return redirect("/")
+    return redirect("/successful_logout")
 
 
 @app.route("/dashboard")
@@ -399,9 +406,3 @@ def deleted_confirmation():
     """
     return render_template("deleted_confirmation.html")
 
-@app.route("/successful_logout")
-def successful_logout():
-    """
-    Rendering the "succesfull_logout.html" template
-    """
-    return render_template("successful_logout.html")
