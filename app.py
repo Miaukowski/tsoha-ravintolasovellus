@@ -8,9 +8,11 @@ from flask import redirect, render_template, request, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
 
 
-app = Flask(__name__)
+
+app = Flask(__name__, static_url_path = '/static', static_folder='static')
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = getenv("SECRET_KEY")
@@ -26,14 +28,16 @@ def front():
         text("SELECT r.id, r.name, AVG(re.rating) as average_rating "
              "FROM restaurants r "
              "LEFT JOIN reviews re ON r.id = re.restaurant_id "
-             "GROUP BY r.id, r.name")
+             "GROUP BY r.id, r.name "
+             "ORDER BY average_rating DESC "
+             "LIMIT 5") 
     ).fetchall()
     return render_template("front_page.html", restaurants=restaurants)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """
-    The login page
+    The login page, also check here if account is deleted (column = TRUE)
     """
     error_message = None
 
@@ -43,7 +47,7 @@ def login():
 
         # Check username and password against the database
         user = db.session.execute(
-            text("SELECT * FROM users WHERE username=:username"),
+            text("SELECT * FROM users WHERE username=:username AND deleted = FALSE"),
             {"username": username}
         ).fetchone()
 
@@ -65,7 +69,7 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """
-    The register a new user page
+    The register a new user page, keep in mind the delete 
     """
     error_message = None
 
@@ -84,10 +88,12 @@ def register():
         else:
             #Hash the password before storing it in the database for safety.
             hash_value = generate_password_hash(password)
+            
 
+            created_at = datetime.now()
             # Insert the new user into the database
-            sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
-            db.session.execute(sql, {"username": username, "password": hash_value})
+            sql = text("INSERT INTO users (username, password, created_at) VALUES (:username, :password, :created_at)")
+            db.session.execute(sql, {"username": username, "password": hash_value, "created_at": created_at})
             db.session.commit()
 
             # Redirect to the login page if register is successfull
@@ -103,7 +109,7 @@ def is_authenticated():
 @app.route("/logout")
 def logout():
     """
-    Needs more work.... sorry.
+    User logout. 
     """
     del session["username"]
     return redirect("/")
@@ -117,12 +123,16 @@ def dashboard():
     if not is_authenticated():
         # Redirect unauthenticated users to the login page
         return redirect(url_for('login'))
+         # Limit the result to the top 5 restaurants so it doesnt overflow. 
     restaurants = db.session.execute(
         text("SELECT r.id, r.name, AVG(re.rating) as average_rating "
              "FROM restaurants r "
              "LEFT JOIN reviews re ON r.id = re.restaurant_id "
-             "GROUP BY r.id, r.name")
+             "GROUP BY r.id, r.name "
+             "ORDER BY average_rating DESC "
+             "LIMIT 5") 
     ).fetchall()
+
     return render_template("dashboard.html", restaurants=restaurants)
 
 
@@ -231,7 +241,7 @@ def restaurant(restaurant_id):
         # Fetch associated hashtags for the restaurant using restaurant_hashtags
         hashtags = db.session.execute(
             text("""
-                SELECT h.hashtag_text
+                SELECT DISTINCT h.hashtag_text
                 FROM hashtags h
                 JOIN restaurant_hashtags rh ON h.id = rh.hashtag_id
                 WHERE rh.restaurant_id = :restaurant_id
@@ -297,6 +307,69 @@ def search():
         return render_template("search_results.html", \
         search_text=search_text, search_result=search_result, hashtag_result = hashtag_result)
 
-    #Handle cases where no search criteria is provided
-    flash("Please enter a search criteria.", "error")
-    return redirect("/dashboard")  # Redirect to the dashboard or an appropriate page
+
+@app.route("/profile")
+def profile():
+    if not is_authenticated():
+        return redirect(url_for('login'))
+
+    username = session["username"]
+
+    # Fetch the user's join date
+    user = db.session.execute(
+        text("SELECT created_at FROM users WHERE username=:username"),
+        {"username": username}
+    ).fetchone()
+
+    # Format the join, looks nicer. 
+    user_joined_date = user.created_at.strftime("%B %d, %Y")
+
+    return render_template("profile.html", username=username, user_joined_date=user_joined_date)
+
+@app.route("/confirm_delete", methods=["GET"])
+def confirm_delete():
+    if not is_authenticated():
+        return redirect(url_for('login'))
+    
+    return render_template("confirm_delete.html")
+
+@app.route("/delete_account", methods=["POST"])
+def delete_account():
+    if not is_authenticated():
+        return redirect(url_for('login'))
+
+    # Validate the user's credentials 
+    username = session.get("username")
+    password = request.form.get("password") 
+
+    user = db.session.execute(
+        text("SELECT * FROM users WHERE username=:username"),
+        {"username": username}
+    ).fetchone()
+
+    if user and check_password_hash(user.password, password):
+        #Deleting kind of:
+        db.session.execute(
+            text("UPDATE users SET deleted = TRUE WHERE username = :username"),
+            {"username": username}
+        )
+        db.session.commit()
+
+        # Log the user out
+        del session["username"]
+
+        # Redirect to a confirmation page
+        return redirect("/deleted_confirmation")
+    else:
+        # Password is incorrect, provide an error message
+        error_message = "Incorrect password. Please try again."
+        return render_template("delete_account.html", error_message=error_message)
+
+
+@app.route("/deleted_confirmation")
+def deleted_confirmation():
+    return render_template("deleted_confirmation.html")
+
+@app.route("/successful_logout")
+def successful_logout():
+    return render_template("successful_logout.html")
