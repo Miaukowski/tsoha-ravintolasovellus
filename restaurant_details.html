@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--This is where the "view information button
+	takes the user. Displays the average rating, 
+	associates hashtags and also text reviews.--> 
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<title>{{ restaurant.name }}</title> 
+</head>
+<body>
+	<header class="header-small">
+		<h1>{{ restaurant.name }}</h1>
+	</header>
+	<header class="subsubheader">
+		<h3>Average Rating: {{ restaurant.average_rating|round(2)}}</h3>
+	</header>
+	<main class="contento">
+	<div class="left-column">
+		<div class="display">
+		<header>
+			<h2>Hashtags</h2>
+		</header>
+			<ul>
+				{% for hashtag in hashtags %}
+					<li>{{ hashtag.hashtag_text }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="display">
+			<h2>Reviews</h2>
+			<ul>
+				{% for review in reviews %}
+					<li>
+						{{ review.review_text }}
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="right-column">
+		<div class="display">
+		<form action="/dashboard">
+			<button type="submit">Go to Dashboard</button>
+		</form>
+		</div>
+		<div class="display">
+		<form action="/successful_logout">
+			<button type="submit">Logout</button>
+		</form>
+		</div>
+	</div>
+	</main>
+</body>
+</html>
+
