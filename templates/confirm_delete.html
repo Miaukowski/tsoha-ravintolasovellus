@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--Doubble checks if the
+	user surely wants to 
+	delete their account --> 
+
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Confirm Account Deletion</title>
+</head>
+<body>
+	<header class="header-small">
+    	<h1>Confirm Account Deletion</h1>
+    </header>
+    <main class="contento">
+    	<div class="left-column">
+    		<div class="display">
+    			<h3>Are you sure you want to delete your account?</h3>
+    		</div>
+    		<div class="display">
+				<form method="POST" action="/delete_account">
+				<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+				<label for="password">Enter Your Password:</label>
+				<input type="password" name="password" id="password" required>
+				<br>
+				<input type="submit" value="Yes, Delete My Account">
+				</form>
+			</div>
+		</div>
+		<div class="right-column">
+			<div class="display">
+				<h3>Would you like to stay a bit longer?</h3>
+			</div>
+			<div class="display">
+				<form action="/dashboard">
+					<button type="submit">Yes, Go Back</button>
+				</form>
+			</div>
+		</div>
+	</main>
+</body>
+</html>
+

@@ -8,41 +8,69 @@
 	system.  --> 
 <html>
 <head>
-    <title>Restaurant Dashboard</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<title>Restaurant Dashboard</title>
 </head>
 <body>
-    <h1>Restaurant Dashboard</h1>
-    <h2>Existing Restaurants</h2>
-	<ul>
-		{% for restaurant in restaurants %}
-		    <li>
-		        {{ restaurant.name }} (Average Rating: {{ restaurant.average_rating|round(2)}})
-		        <a href="/restaurant/{{ restaurant.id }}">More Information</a>
-		    </li>
-		{% endfor %}
-	</ul>
-	
-	<form method="GET" action="/search">
-    <label for="search_text">Search Restaurants:</label>
-    <input type="text" name="search_text" id="search_text" placeholder="Enter restaurant name">
-    <input type="submit" value="Search">
-	</form>
-    
-    <h2>Review a New Restaurant</h2>
-    <form method="POST" action="/review">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        <label for="restaurant_name">Restaurant Name:</label>
-        <input type="text" name="restaurant_name" required><br>
-        
-        <label for="rating">Rating (0-5):</label>
-        <input type="number" name="rating" min="0" max="5" required><br>
-        
-        <label for="review_text">Review Text:</label>
-        <textarea name="review_text" required></textarea><br>
-        <label for="hashtags">Hashtags (comma-separated):</label>
-		<input type="text" name="hashtags" id="hashtags">
+	<header class="header-small">
+    	<h1>Restaurant Dashboard</h1>
+    </header>
+    <main class="contento">
+    	<div class="left-column">
+    		<div class="display">
+				<h3>Top 5 reviewed restaurants:</h3>
+				<ul>
+			</div>
+			<div class="display">
+				<ul>
+					{% for restaurant in restaurants %}
+						<li>
+						    {{ restaurant.name }} (Average Rating: {{ restaurant.average_rating|round(2)}})
+						    <a href="/restaurant/{{ restaurant.id }}">More Information</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="display">
+				<form method="GET" action="/search">
+				<label for="search_text">Search Restaurants:</label>
+				<input type="text" name="search_text" id="search_text" placeholder="Enter restaurant name">
+				<input type="submit" value="Search">
+				</form>
+			</div>
+		</div>
+		<div class="right-column">
+			<div class="display">
+				<h3>Review a Restaurant:</h3>
+			</div>
+			<div class="display">
+				<form method="POST" action="/review">
+					<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+					<label for="restaurant_name">Restaurant Name:</label>
+					<input type="text" name="restaurant_name" required><br>
+					
+					<label for="rating">Rating (0-5):</label>
+					<input type="number" name="rating" min="0" max="5" required><br>
+					
+					<label for="review_text">Review Text:</label>
+					<textarea name="review_text" required></textarea><br>
+					<label for="hashtags">Hashtags (comma-separated):</label>
+					<input type="text" name="hashtags" id="hashtags">
 
-        <input type="submit" value="Submit Review">
-    </form>
+					<input type="submit" value="Submit Review">
+				</form>
+			</div>
+			<div class="display">
+				<form action="/profile">
+					<button type="submit">My Profile</button>
+				</form>
+				<form action="/successful_logout">
+					<button type="submit">Logout</button>
+				</form>
+			</div>
+		</div>
+	</main>
 </body>
 </html>
+
