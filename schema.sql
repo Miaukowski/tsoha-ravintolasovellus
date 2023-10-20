@@ -1,11 +1,13 @@
 
--- Stores users
+-- Stores users, has column for deletion
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT NOT NULL,
     password TEXT NOT NULL,
-    created_at TIMESTAMP
+    created_at TIMESTAMP DEFAULT NOW(),
+    deleted BOOLEAN DEFAULT FALSE  
 );
+
 
 -- Stores restaurants
 CREATE TABLE restaurants (
@@ -42,6 +44,7 @@ CREATE TABLE review_hashtags (
 	id SERIAL PRIMARY KEY, 
 	review_id INT NOT NULL,
 	hashtag_id INT NOT NULL,
-	FOREIGN KEY (review_id) REFERENCES reviews(id)
+	FOREIGN KEY (review_id) REFERENCES reviews(id),
 	FOREIGN KEY (hashtag_id) REFERENCES hashtags(id) 
+);
 
