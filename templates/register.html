@@ -20,12 +20,14 @@
 	<div class="container">
 		<form method="POST" action="/register">
 		    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-		    <label for="username">Username:</label>
-		    <input type="text" id="username" name="username" required><br><br>
-		    
-		    <label for="password">Password:</label>
-		    <input type="password" id="password" name="password" required><br><br>
-		    
+		    <p style="color: black;">Username must be 5-20 characters and contain only alphanumeric characters and underscores.</p>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br><br>
+            <p style="color: black;">Password must be at least 8 characters long and meet complexity requirements (at least one uppercase, one lowercase, one digit, one special character).</p>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br><br>
 		    <input type="submit" value="Register">
     	</form>
     </div>
