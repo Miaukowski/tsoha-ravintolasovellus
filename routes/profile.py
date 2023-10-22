@@ -80,4 +80,4 @@ def delete_account():
         return redirect("/deleted_confirmation")
 
     error_message = "Incorrect password. Please try again."
-    return render_template("delete_account.html", error_message=error_message)
+    return render_template("confirm_delete.html", error_message=error_message)
