@@ -18,6 +18,9 @@
     		<div class="display">
     			<h3>Are you sure you want to delete your account?</h3>
     		</div>
+    		{% if error_message %}
+    		<p style="color: red;">{{ error_message }}</p>
+    		{% endif %}
     		<div class="display">
 				<form method="POST" action="/delete_account">
 				<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
